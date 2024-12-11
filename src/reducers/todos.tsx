@@ -8,7 +8,9 @@ interface Action {
   text: string;
 }
 
-const todos = (state = [], action: Action) => {
+const initialState: string[] = [];
+
+const todos = (state = initialState, action: Action): string[] => {
   switch (action.type) {
     case 'ADD_TODO':
       return [...state, action.text]

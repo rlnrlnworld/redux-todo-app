@@ -3,15 +3,25 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore } from 'redux';
-import rootReducer from './reducers';
+import { applyMiddleware, createStore, Store } from 'redux';
+import rootReducer, { RootState } from './reducers';
 import { Provider } from 'react-redux';
+import { thunk } from 'redux-thunk';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const store = createStore(rootReducer);
+const loggerMiddleware = (store: any) => (next: any) => (action: any) => {
+  console.log("store", store);
+  console.log("action", action);
+  next(action);
+};
+
+const store = createStore(
+  rootReducer as any, // 타입 캐스팅 적용
+  applyMiddleware(thunk, loggerMiddleware)
+) as Store<RootState>;
 
 const render = () => root.render(
   <React.StrictMode>
