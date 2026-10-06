@@ -2,6 +2,8 @@
 
 Redux 스터디용 프로젝트입니다. 2024년 12월 11일에 학습 목적으로 만든 예제라 실서비스 코드가 아닙니다.
 
+**Live**: https://rlnrlnworld.github.io/redux-todo-app/
+
 ## 다뤄 본 것
 
 - `createStore` + `combineReducers`로 리듀서 분리 (counter / todos / posts)
