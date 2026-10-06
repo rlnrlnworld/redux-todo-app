@@ -1,25 +1,43 @@
-enum ActionType {
-  FETCH_POSTS = "FETCH_POSTS",
-  DELETE_POSTS = "DELETE_POSTS"
-}
-
-interface Post {
+export interface Post {
   userId: number;
   id: number;
   title: string;
+  body: string;
 }
 
-interface Action {
-  type: ActionType;
-  payload: Post[];
+export type FetchStatus = "idle" | "loading" | "succeeded" | "failed";
+
+export interface PostsState {
+  status: FetchStatus;
+  items: Post[];
+  error: string | null;
+  page: number;
+  total: number;
 }
 
-const initialState: Post[] = []; // 초기 상태 타입 지정
+export const PAGE_SIZE = 20;
 
-const posts = (state = initialState, action: Action): Post[] => {
+type Action =
+  | { type: "FETCH_POSTS_REQUEST"; page: number }
+  | { type: "FETCH_POSTS_SUCCESS"; payload: Post[]; page: number; total: number }
+  | { type: "FETCH_POSTS_FAILURE"; error: string };
+
+const initialState: PostsState = {
+  status: "idle",
+  items: [],
+  error: null,
+  page: 1,
+  total: 0,
+};
+
+const posts = (state = initialState, action: Action): PostsState => {
   switch (action.type) {
-    case ActionType.FETCH_POSTS:
-      return [...state, ...action.payload];
+    case "FETCH_POSTS_REQUEST":
+      return { ...state, status: "loading", error: null, page: action.page };
+    case "FETCH_POSTS_SUCCESS":
+      return { ...state, status: "succeeded", items: action.payload, page: action.page, total: action.total, error: null };
+    case "FETCH_POSTS_FAILURE":
+      return { ...state, status: "failed", error: action.error };
     default:
       return state;
   }

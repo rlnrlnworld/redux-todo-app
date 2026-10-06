@@ -1,22 +1,25 @@
-enum ActionType {
-  ADD_TODO = "ADD_TODO",
-  DELETE_TODO = "DELETE_TODO"
-}
-
-interface Action {
-  type: ActionType;
+export interface Todo {
+  id: number;
   text: string;
 }
 
-const initialState: string[] = [];
+type Action =
+  | { type: "ADD_TODO"; text: string }
+  | { type: "DELETE_TODO"; id: number };
 
-const todos = (state = initialState, action: Action): string[] => {
+const initialState: Todo[] = [];
+
+let nextId = 1;
+
+const todos = (state = initialState, action: Action): Todo[] => {
   switch (action.type) {
-    case 'ADD_TODO':
-      return [...state, action.text]
+    case "ADD_TODO":
+      return [...state, { id: nextId++, text: action.text }];
+    case "DELETE_TODO":
+      return state.filter((todo) => todo.id !== action.id);
     default:
-      return state
+      return state;
   }
-}
+};
 
 export default todos;
